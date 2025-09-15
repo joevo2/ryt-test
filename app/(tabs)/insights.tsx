@@ -65,9 +65,7 @@ export default function TabTwoScreen() {
         <ThemedView style={styles.titleContainer}>
           <ThemedText type="title">Transactions</ThemedText>
         </ThemedView>
-        <ThemedText>
-          Recent activities on your accounts. Tap a transaction for details.
-        </ThemedText>
+        <ThemedText>Recent activities on your accounts</ThemedText>
         <TransactionFilters
           dateFilter={dateFilter}
           typeFilter={typeFilter}

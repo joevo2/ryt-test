@@ -31,7 +31,11 @@ export default function TransactionFilters({
                 dateFilter === d && styles.filterButtonActive,
               ]}
             >
-              <ThemedText>{d === 'all' ? 'All' : `${d}d`}</ThemedText>
+              <ThemedText
+                style={{ color: dateFilter === d ? 'white' : 'black' }}
+              >
+                {d === 'all' ? 'All' : `${d}d`}
+              </ThemedText>
             </Pressable>
           ))}
         </ThemedView>
@@ -49,7 +53,9 @@ export default function TransactionFilters({
                 typeFilter === t && styles.filterButtonActive,
               ]}
             >
-              <ThemedText>
+              <ThemedText
+                style={{ color: typeFilter === t ? 'white' : 'black' }}
+              >
                 {t === 'all' ? 'All' : t[0].toUpperCase() + t.slice(1)}
               </ThemedText>
             </Pressable>
@@ -85,7 +91,7 @@ const styles = StyleSheet.create({
     borderColor: '#ddd',
   },
   filterButtonActive: {
-    backgroundColor: '#e6f7ff',
+    backgroundColor: '#2600ffff',
     borderColor: '#70b7ff',
   },
 });

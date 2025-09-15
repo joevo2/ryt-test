@@ -12,7 +12,7 @@ export default function TabLayout() {
         />
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="insights">
-        <Label>Transactions</Label>
+        <Label>Insights</Label>
         <Icon
           sf={{ default: 'list.dash', selected: 'list.dash' }}
           drawable="custom_home_drawable"
