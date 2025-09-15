@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import * as Contacts from 'expo-contacts';
 import React, { useState } from 'react';
 import {
@@ -32,12 +33,10 @@ export default function SendModal({
 }) {
   const [amount, setAmount] = useState('');
   const [recipient, setRecipient] = useState('');
+  const [contactPhone, setContactPhone] = useState<string | null>(null);
   const [note, setNote] = useState('');
   const [selectedBank, setSelectedBank] = useState<string>(MALAYSIAN_BANKS[0]);
   const [showBankList, setShowBankList] = useState<boolean>(false);
-
-  const [contactName, setContactName] = useState<string | null>(null);
-  const [contactPhone, setContactPhone] = useState<string | null>(null);
 
   async function handleContactPicker() {
     const { status } = await Contacts.requestPermissionsAsync();
@@ -49,13 +48,13 @@ export default function SendModal({
             existingContact.id
           );
           if (contact) {
-            setContactName(contact.firstName || 'Unnamed');
+            setRecipient(contact.firstName || 'Unnamed');
             setContactPhone(contact.phoneNumbers?.[0]?.number ?? 'No phone');
           }
           return;
         }
       } catch (err) {
-        setContactName('Error fetching contacts');
+        setRecipient('Error fetching contacts');
         setContactPhone(null);
         console.error(err);
       }
@@ -93,17 +92,17 @@ export default function SendModal({
           <ThemedText style={{ marginTop: 8 }}>Recipient</ThemedText>
           <View style={styles.recipientRow}>
             <TextInput
-              value={recipient || contactName}
+              value={recipient}
               onChangeText={(t) => setRecipient(t)}
               placeholder="Name or phone"
               style={[styles.input, { flex: 1 }]}
             />
             <Pressable onPress={handleContactPicker} style={styles.smallButton}>
-              <ThemedText>Pick</ThemedText>
+              <Ionicons name={'people-outline'} size={24} />
             </Pressable>
           </View>
 
-          <ThemedText style={{ marginTop: 8 }}>Bank (Malaysia)</ThemedText>
+          <ThemedText style={{ marginTop: 8 }}>Bank</ThemedText>
           <Pressable
             onPress={() => setShowBankList((s) => !s)}
             style={styles.select}
@@ -167,7 +166,7 @@ export default function SendModal({
                 Alert.alert('Sending', JSON.stringify(payload));
                 setModalVisible(false);
               }}
-              style={[styles.actionButton, { backgroundColor: '#007bff' }]}
+              style={[styles.actionButton, { backgroundColor: '#2600ffff' }]}
             >
               <ThemedText style={{ color: 'white' }}>Send</ThemedText>
             </Pressable>
@@ -233,7 +232,7 @@ const styles = StyleSheet.create({
   recipientRow: {
     flexDirection: 'row',
     gap: 8,
-    alignItems: 'center',
+    flex: 1,
   },
   smallButton: {
     padding: 8,

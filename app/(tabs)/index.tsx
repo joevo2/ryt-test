@@ -16,6 +16,7 @@ export default function HomeScreen() {
     >
       <ThemedView style={styles.rootContainer}>
         <BalanceHeader balance={balance} />
+        <ThemedText>Todos:</ThemedText>
         <ThemedText>
           Display recent transfer history for quick re-sending
         </ThemedText>
