@@ -1,5 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import * as Contacts from 'expo-contacts';
+import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
   Alert,
@@ -13,6 +14,8 @@ import {
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+
+import { useTransactions } from '../app/contexts';
 
 const MALAYSIAN_BANKS = [
   'Maybank',
@@ -31,6 +34,9 @@ export default function SendModal({
   visible: boolean;
   setModalVisible: (v: boolean) => void;
 }) {
+  const router = useRouter();
+  const { addTransaction } = useTransactions();
+
   const [amount, setAmount] = useState('');
   const [recipient, setRecipient] = useState('');
   const [contactPhone, setContactPhone] = useState<string | null>(null);
@@ -61,6 +67,56 @@ export default function SendModal({
     }
   }
 
+  const handleAddTransaction = () => {
+    // validate
+    const amt = parseFloat(amount);
+    if (isNaN(amt) || amt <= 0) {
+      Alert.alert('Enter a valid amount');
+      return;
+    }
+    if (!recipient) {
+      Alert.alert('Enter a recipient or pick a contact');
+      return;
+    }
+
+    const payload = {
+      amount: amt,
+      recipient,
+      contactPhone,
+      bank: selectedBank,
+      note,
+    };
+
+    if (!recipient || !amount || isNaN(Number(amount))) return;
+
+    addTransaction({
+      title: 'Transfer to ' + recipient,
+      subtitle: `Sent to ${selectedBank}\n${note}`,
+      amount: amt,
+    });
+
+    Alert.alert('Transaction Added', JSON.stringify(payload));
+    setModalVisible(false);
+    setAmount('');
+    setRecipient('');
+    setContactPhone(null);
+    setNote('');
+    setSelectedBank(MALAYSIAN_BANKS[0]);
+    setShowBankList(false);
+
+    router.navigate('/insights');
+  };
+
+  const onExit = () => {
+    setModalVisible(false);
+    setAmount('');
+    setRecipient('');
+    setContactPhone(null);
+    setNote('');
+    setSelectedBank(MALAYSIAN_BANKS[0]);
+    setShowBankList(false);
+  };
+
   return (
     <Modal
       visible={visible}
@@ -68,7 +124,7 @@ export default function SendModal({
       presentationStyle="pageSheet"
       transparent={false}
       allowSwipeDismissal
-      onRequestClose={() => setModalVisible(false)}
+      onRequestClose={onExit}
     >
       <ThemedView style={styles.fullModal}>
         <View style={styles.header}>
@@ -136,36 +192,11 @@ export default function SendModal({
           />
 
           <View style={styles.actionsRow}>
-            <Pressable
-              onPress={() => setModalVisible(false)}
-              style={styles.actionButton}
-            >
+            <Pressable onPress={onExit} style={styles.actionButton}>
               <ThemedText>Cancel</ThemedText>
             </Pressable>
             <Pressable
-              onPress={() => {
-                // validate
-                const amt = parseFloat(amount);
-                if (isNaN(amt) || amt <= 0) {
-                  Alert.alert('Enter a valid amount');
-                  return;
-                }
-                if (!recipient) {
-                  Alert.alert('Enter a recipient or pick a contact');
-                  return;
-                }
-
-                const payload = {
-                  amount: amt,
-                  recipient,
-                  contactPhone,
-                  bank: selectedBank,
-                  note,
-                };
-                console.log('Send payload', payload);
-                Alert.alert('Sending', JSON.stringify(payload));
-                setModalVisible(false);
-              }}
+              onPress={handleAddTransaction}
               style={[styles.actionButton, { backgroundColor: '#2600ffff' }]}
             >
               <ThemedText style={{ color: 'white' }}>Send</ThemedText>

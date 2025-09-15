@@ -1,6 +1,3 @@
-- Include a README with setup instructions and any necessary assumptions we might need to run your app and evaluate your work
-- Prepare a demo video in the README to showcase the app
-
 ## Get started
 
 1. Install dependencies
@@ -14,11 +11,14 @@
    ```bash
    npx expo start
    ```
-## Get a fresh project
 
-When you're ready, run:
+3. Download Expo Go to open this project
 
-```bash
-npm run reset-project
-```
+Notes: 
+- Dark mode styling is currently incomplete and may require further refinement.
+- Biometric verification could not be implemented due to limitations in Expo Go and the unavailability of a paid Apple developer account or a Mac, given the short notice.
 
+## Video Recording 
+<video controls src="https://www.dropbox.com/scl/fi/2lauwvjiba30vg7e4llmg/Video-15-09-2025-7-38-40-PM.mp4?rlkey=mjzcn5axfrwu7ci7lr879gcde&st=sebzvg5n&dl=0" title="Title"></video>
+
+[Download Link](https://www.dropbox.com/scl/fi/2lauwvjiba30vg7e4llmg/Video-15-09-2025-7-38-40-PM.mp4?rlkey=mjzcn5axfrwu7ci7lr879gcde&st=sebzvg5n&dl=0)

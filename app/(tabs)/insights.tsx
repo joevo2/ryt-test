@@ -3,15 +3,16 @@ import { FlashList } from '@shopify/flash-list';
 import { useMemo, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import TRANSACTIONS, { Transaction } from '../../data/transactions';
+import { Transaction } from '../../data/transactions';
+import { useTransactions } from '../contexts';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { useThemeColor } from '@/hooks/use-theme-color';
 
-const DATA = TRANSACTIONS;
-
 export default function TabTwoScreen() {
+  const { transactions } = useTransactions();
+
   const [dateFilter, setDateFilter] = useState<'all' | '7' | '30'>('all');
   const [typeFilter, setTypeFilter] = useState<'all' | 'debit' | 'credit'>(
     'all'
@@ -22,7 +23,7 @@ export default function TabTwoScreen() {
     const cutoff7 = now - 1000 * 60 * 60 * 24 * 7;
     const cutoff30 = now - 1000 * 60 * 60 * 24 * 30;
 
-    return DATA.filter((transaction: Transaction) => {
+    return transactions.filter((transaction: Transaction) => {
       // type filter
       if (typeFilter === 'debit' && transaction.amount >= 0) return false;
       if (typeFilter === 'credit' && transaction.amount < 0) return false;
@@ -33,7 +34,7 @@ export default function TabTwoScreen() {
 
       return true;
     });
-  }, [dateFilter, typeFilter]);
+  }, [dateFilter, transactions, typeFilter]);
 
   function renderItem({ item: transaction }: { item: Transaction }) {
     const amountColor = transaction.amount < 0 ? '#FF3B30' : '#34C759';
